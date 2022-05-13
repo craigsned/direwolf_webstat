@@ -6,7 +6,10 @@ This script may have a lot of bugs, problems and it's written in very non-effici
 Author: Alfredo IZ7BOJ
 You can modify this program, but please give a credit to original author. Program is free for non-commercial use only.
 (C) Alfredo IZ7BOJ 2021
-*******************************************************************************************/
+/*******************************************************************************************/
+This fork has alternative layout - creating two columns at the top.  Edit lines 58 and 59 to own Callsign and Location
+MM0NBW - 2022
+******************************************************************************************/	
 include 'config.php';
 include 'functions.php';
 if(file_exists('custom.php')) include 'custom.php';
@@ -44,23 +47,29 @@ $if = $_SESSION['if'];
    <body>
       <?php
          if(file_exists($logourl)){
-         ?>
-      <center><img src="<?php echo $logourl ?>" width="100px" height="100px" align="middle"></center>
-      <br>
+         ?><table width="100%" style="border: none" cellpadding="5">
+  <tbody>
+    <tr>
+      <td style=" width:30%; border: none"><left><img src="<?php echo $logourl ?>" width="60px" height="60px" align="left"></left>
       <?php
          }
          ?>
-      <center>
-         <font size="20"><b>Direwolf statistics</b></font>
-         <h2>for interface <font color="red"><b><?php echo $if."-".$intdesc[$if] ?></b></font> - summary</h2>
+      <left>
+           <h1>&nbsp;&nbsp;&nbsp;CALLSIGN</h1>
+	 <h3>APRS iGate/Digipeater, LOCATION</h3>
+         <br>
+         <h4>for interface <font color="red"><b><?php echo $if."-".$intdesc[$if] ?></b></font> - summary</h4>
          <a href="chgif.php?chgif=1">Change interface</a>
          <br>
          <br><b>Show:</b> <a href="summary.php">Summary (main)</a> - <a href="frames.php">frames of a specified station</a><br><br>
          <button onclick="window.open('live.php')">Watch AX.25 realtime traffic</button>
-         <br><br>
-         <hr>
-      </center>
-      <br>
+         <br>       
+		  
+      </left</td>
+		  
+   
+	<td style="width:60%; border: none">
+
       <?php
          // System parameters reading
          $sysver      = NULL;
@@ -84,42 +93,46 @@ $if = $_SESSION['if'];
          $uptime = shell_exec('uptime -p');
 		?>
         
-      <br>
-      <table style="text-align: left; height: 116px; width: 600px;" border="1" cellpadding="2" cellspacing="2">
+  
+      <table style="text-align: left; height: 116px; width: 540px;" border="1" cellpadding="2" cellspacing="2">
          <tbody>
             <tr align="center">
-               <td bgcolor="#ffd700" style="width: 600px;" colspan="2" rowspan="1"><span
+               <td bgcolor="#ffd700" style="width: 540px;" colspan="2" rowspan="1"><span
                   style="color: red; font-weight: bold;">SYSTEM STATUS</span></td>
             </tr>
             <tr>
-               <td bgcolor="silver" style="width: 200px;"><b>System Version: </b></td>
-               <td style="width: 400px;"><?php echo $sysver ?></td>
+               <td bgcolor="silver" style="width: 170px;"><b>System Version: </b></td>
+               <td style="width: 370px;"><?php echo $sysver ?></td>
             </tr>
             <tr>
-               <td bgcolor="silver" style="width: 200px;"><b>Kernel Version: </b></td>
-               <td style="width: 400px;"><?php echo $kernelver ?></td>
+               <td bgcolor="silver" style="width: 170px;"><b>Kernel Version: </b></td>
+               <td style="width: 370px;"><?php echo $kernelver ?></td>
             </tr>
             <tr>
-               <td bgcolor="silver" style="width: 200px;"><b>Direwolf Version: </b></td>
-               <td style="width: 400px;"><?php echo $direwolfver ?></td>
+               <td bgcolor="silver" style="width: 170px;"><b>Direwolf Version: </b></td>
+               <td style="width: 370px;"><?php echo $direwolfver ?></td>
             </tr>
             <tr>
-               <td bgcolor="silver" style="width: 200px;"><b>System uptime: </b></td>
-               <td style="width: 400px;"><?php echo $uptime ?></td>
+               <td bgcolor="silver" style="width: 170px;"><b>System uptime: </b></td>
+               <td style="width: 370px;"><?php echo $uptime ?></td>
             </tr>
             <tr>
-               <td bgcolor="silver" style="width: 200px;"><b>CPU temperature:</b></td>
-               <td style="width: 400px;"><?php echo $cputemp ?> °C </td>
+               <td bgcolor="silver" style="width: 170px;"><b>CPU temperature:</b></td>
+               <td style="width: 370px;"><?php echo $cputemp ?> °C </td>
             </tr>
             <tr>
-               <td bgcolor="silver" style="width: 200px;"><b>CPU frequency: </b></td>
-               <td style="width: 400px;"><?php echo $cpufreq ?> MHz </td>
-            </tr>
-         </tbody>
-      </table>
-      <br><br>
-      <hr>
-      <br><br>
+               <td bgcolor="silver" style="width: 170px;"><b>CPU frequency: </b></td>
+               <td style="width: 370px;"><?php echo $cpufreq ?> MHz </td>
+            </tr>         </tbody>
+		</table></td></td>
+    </tr>
+  </tbody>
+</table>
+<br>
+   <hr>
+      <br>
+
+      <br>
 	     <?php		
 		 $time = 0; //start of the time from which to read data from log in Unix timestamp type
 		 if(!isset($_GET['time']) or ($_GET['time'] == "")) { //if time range not specified
@@ -164,7 +177,6 @@ $if = $_SESSION['if'];
          <option value="e" <?php if(isset($_GET['time'])&&($_GET['time'] == 'e')) echo 'selected="selected"'?>>all</option>
       </select>
       <input type="submit" value="Refresh">
-      </form>
 	  <br>
 	  <?php
 	  echo "<br><br><b>".count($receivedstations)." Stations received on radio interface ".$if." (sorted by Last Time Heard)</b><br><br>";
@@ -215,11 +227,7 @@ $if = $_SESSION['if'];
                <td align="center">
                   <?php
                    if (isset($nm[2])) :
-		       if ($miles == 0):
-                                echo $nm[2]." Km";
-                        else:
-                                echo $nm[2]*0.6214." miles";
-                        endif;
+                        echo $nm[2]." Km";
                    else:
                         echo "N/A";
                    endif;
